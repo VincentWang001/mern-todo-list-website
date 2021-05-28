@@ -18,7 +18,7 @@ const Button = props => {
     function myFunction() {
         axios.post('http://localhost:4000/todos/delete/'+props.todoID)
             .then(res => console.log(res.data));
-        
+        window.location.reload(false);
         //props.history.push('/');
     }
     return <button onClick={myFunction}>Delete</button>
