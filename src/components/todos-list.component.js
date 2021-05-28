@@ -10,8 +10,20 @@ const Todo = props => (
         <td>
             <Link to={"/edit/"+props.todo._id}>Edit</Link>
         </td>
+        <td><Button todoID={props.todo._id}/></td>
     </tr>
-)
+);
+
+const Button = props => {
+    function myFunction() {
+        axios.post('http://localhost:4000/todos/delete/'+props.todoID)
+            .then(res => console.log(res.data));
+        
+        //props.history.push('/');
+    }
+    return <button onClick={myFunction}>Delete</button>
+}
+
 export default class TodosList extends Component {
 
     constructor(props) {
@@ -19,8 +31,9 @@ export default class TodosList extends Component {
         this.state = {todos: []};
     }
 
+    
+
     componentDidMount() {
-        console.log("it did something");
         axios.get('http://localhost:4000/todos/')
             .then(response => {
                 this.setState({ todos: response.data });
@@ -31,12 +44,20 @@ export default class TodosList extends Component {
     }
 
     todoList() {
-        return this.state.todos.map(function(currentTodo, i){
+        
+        return this.state.todos.map(function(currentTodo, i) {
             return <Todo todo={currentTodo} key={i} />;
         })
     }
 
     render() {
+        // const obj = {
+        //     todo_description: "hello",
+        //     todo_responsible: "response.data.todo_responsible",
+        //     todo_priority: "response.data.todo_priority",
+        //     todo_completed: ""
+        //  };
+        
         return (
             <div>
                 <h3>Todos List</h3>
@@ -46,11 +67,13 @@ export default class TodosList extends Component {
                             <th>Description</th>
                             <th>Responsible</th>
                             <th>Priority</th>
-                            <th>Action</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         { this.todoList() }
+                        
                     </tbody>
                 </table>
             </div>
